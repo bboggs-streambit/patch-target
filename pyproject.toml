@@ -1,10 +1,11 @@
 [tool.poetry]
 name = "patch-target"
-version = "0.1.8"
+version = "0.1.9"
 description = "Create unittest.mock.patch target values from python modules instead of string wrangling"
 authors = ["brad.boggs <bradleywboggs@protonmail.com>"]
 license = "MIT"
 readme = "README.md"
+repository = "https://github.com/bboggs-streambit/patch-target"
 
 [tool.poetry.dependencies]
 python = "^3.10"
