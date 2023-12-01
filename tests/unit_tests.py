@@ -106,7 +106,7 @@ def test_process_unverified_candidate_with_module_type() -> None:
     assert actual == expected
 
 
-def test_process_unverified_candidate_with_string_type():
+def test_process_unverified_candidate_with_string_type() -> None:
     visiting = "attribute"
     actual = list(get_verified_visitor_candidates(visiting))
     expected = [visiting]
@@ -114,7 +114,7 @@ def test_process_unverified_candidate_with_string_type():
     assert actual == expected
 
 
-def test_proces_unverified_candidate_with_function_type():
+def test_proces_unverified_candidate_with_function_type() -> None:
     visiting = uuid4
     actual = list(get_verified_visitor_candidates(visiting))
     expected = ["uuid4"]

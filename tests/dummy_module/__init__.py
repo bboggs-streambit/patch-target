@@ -13,5 +13,5 @@ def generate_uuid() -> UUID:
     return uuid4()
 
 
-def something():
+def something() -> str:
     return dummy_other_module.some_other_func()

@@ -6,11 +6,12 @@ PatchTarget = NewType("PatchTarget", str)
 NamedCallable: typing.TypeAlias = Callable[[Any], Any]
 
 
+@typing.runtime_checkable
 class Named(Protocol):
     __name__: str
 
 
-UnverifiedVisitorCandidate = Named | NamedCallable | str
+UnverifiedVisitorCandidate = Any
 VisitorCandidate = NewType("VisitorCandidate", str)
 ModulePathElement = str
 
@@ -22,9 +23,6 @@ class InvalidPatchTargetException(Exception):
 class UnpatchableModuleAttributeTypeError(Exception):
     pass
 
-
-def is_named(value: Any) -> TypeGuard[Named]:
-    return hasattr(value, "__name__")
 
 
 def get_visitor_candidates_from_path_element_list(
@@ -38,12 +36,12 @@ def get_visitor_candidates_from_path_element_list(
 
 def get_verified_visitor_candidates(
     candidate: UnverifiedVisitorCandidate,
-) -> typing.Generator[VisitorCandidate, TypeError, None]:
+) -> typing.Generator[VisitorCandidate, UnpatchableModuleAttributeTypeError, None]:
     match candidate:
         case str():
-            for c in [candidate]:
+            for c in [VisitorCandidate(candidate)]:
                 yield c
-        case candidate if is_named(candidate):
+        case Named():
             for c in get_visitor_candidates_from_path_element_list(
                 candidate.__name__.split(".")
             ):

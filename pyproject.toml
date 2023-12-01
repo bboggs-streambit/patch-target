@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "patch-target"
-version = "0.1.9"
+version = "0.1.10"
 description = "Create unittest.mock.patch target values from python modules instead of string wrangling"
 authors = ["brad.boggs <bradleywboggs@protonmail.com>"]
 license = "MIT"

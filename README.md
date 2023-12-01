@@ -12,8 +12,9 @@ attempts to make using this function a more straightforward, reliably correct ex
 
 the `patch_target` function takes 2 arguments:
 - a `host_module` of type `ModuleType`
-- and an `object_to_be_patched`, a Union of `Named | Callable[[Any], Any] | str` (the `str` type is used for overriding module-level attribute)
- where `Named` is a Protocol describing an object with a `__name__` attribute.
+- and an `object_to_be_patched`, which can be of type `Any`,
+  but note that __the only Patchable types are `Named | str`, where `Named` is a protocol describing any object with a `__name__` attr__
+- see note* on passing `str` types below 
 
 Since you're dealing with python objects instead of strings, you get more guarantees out of the box.
 E.g. since you have to pass in a module instead of a string, that means you have to have successfully imported the module
@@ -85,7 +86,7 @@ def test_get_module_level_attribute() -> None:
         
         assert actual == expected
 ```
-### Note that though patching module-level attributes using the string name of the variable _is_ supported, you can just use unittest.mock.patch.object the same way. So you don't need this lib to accomplish it.
+### * Note that though patching module-level attributes using the string name of the variable _is_ supported, you can just use unittest.mock.patch.object the same way. So you don't need this lib to accomplish it.
 ```python
 # using unittest.mock.patch.object
 from unittest.mock import patch

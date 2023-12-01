@@ -1,4 +1,4 @@
-def some_other_func():
+def some_other_func() -> str:
     return "Hi"
 
 
