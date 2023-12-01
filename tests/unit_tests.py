@@ -1,4 +1,7 @@
+import datetime
 import uuid
+from uuid import uuid4
+
 import pytest  # type: ignore
 
 from patch_target import (
@@ -7,11 +10,10 @@ from patch_target import (
     PatchTarget,
     get_visitor_candidates_from_path_element_list,
     get_verified_visitor_candidates,
+    UnpatchableModuleAttributeTypeError,
 )
 from tests import dummy_module, dummy_other_module
-import datetime
-from uuid import uuid4
-
+from tests.dummy_module import some_value
 from tests.dummy_other_module.nested_dummy_other_module import (
     more_nesting_of_the_dummy_other_module,
 )
@@ -49,6 +51,23 @@ def test_patch_target_overrides_module_level_variables() -> None:
     expected_str_path = PatchTarget("tests.dummy_module.some_value")
 
     assert actual_str_path == expected_str_path
+
+
+def test_patch_target_overrides_module_level_variables_raises_unpatchable_module_attribute_type_error() -> None:
+    with pytest.raises(UnpatchableModuleAttributeTypeError) as e:
+        patch_target(dummy_module, some_value)
+
+    assert e.type is UnpatchableModuleAttributeTypeError
+
+
+def test_patch_target_overrides_module_level_variables_raises_unpatchable_module_attribute_type_error_with_helpul_error_message() -> None:
+    with pytest.raises(UnpatchableModuleAttributeTypeError) as e:
+        patch_target(dummy_module, some_value)
+
+    assert (
+        str(e.value)
+        == "object_to_be_patched does not have a __name__ attribute. You may need to pass the name as a string."
+    )
 
 
 def test_patch_target_provides_valid_patch_string_for_local_module() -> None:

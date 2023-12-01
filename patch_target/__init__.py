@@ -19,6 +19,10 @@ class InvalidPatchTargetException(Exception):
     pass
 
 
+class UnpatchableModuleAttributeTypeError(Exception):
+    pass
+
+
 def is_named(value: Any) -> TypeGuard[Named]:
     return hasattr(value, "__name__")
 
@@ -26,7 +30,10 @@ def is_named(value: Any) -> TypeGuard[Named]:
 def get_visitor_candidates_from_path_element_list(
     module_path_elements: list[ModulePathElement],
 ) -> typing.Generator[VisitorCandidate, None, None]:
-    return (VisitorCandidate(".".join(module_path_elements[i:])) for i in range(len(module_path_elements)))
+    return (
+        VisitorCandidate(".".join(module_path_elements[i:]))
+        for i in range(len(module_path_elements))
+    )
 
 
 def get_verified_visitor_candidates(
@@ -42,7 +49,9 @@ def get_verified_visitor_candidates(
             ):
                 yield c
         case _:
-            raise TypeError
+            raise UnpatchableModuleAttributeTypeError(
+                "object_to_be_patched does not have a __name__ attribute. You may need to pass the name as a string."
+            )
 
 
 def patch_target(
